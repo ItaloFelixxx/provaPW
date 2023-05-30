@@ -23,16 +23,12 @@ public class SuplementoService{
     public List<Produto> getItensNaoDeletados() {
         return repository.findByDeletedIsNull();
     }
-    public void excluirItem(Produto produto) {
-        produto.setDeleted(LocalDate.now());
-        repository.save(produto);
-    }
 
     public List<Produto> listarOfertas(){
         return repository.findByInSaleIsTrue();
     }
 
-    public Optional<Produto> buscarPeloId(String id){
+    public Produto buscarPeloId(String id){
         return repository.findSuplementoById(id);
     }
 
@@ -42,5 +38,9 @@ public class SuplementoService{
 
     public List<Produto> listarTodos(){
         return repository.findAll();
+    }
+
+    public void update(Produto p){
+        repository.saveAndFlush(p);
     }
 }

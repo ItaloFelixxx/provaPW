@@ -12,9 +12,7 @@ public class UsuarioService{
 
     public UsuarioService(UsuarioRepository repository) {
         this.repository = repository;
-
     }
-
 
     public void create(Usuario u){
         this.repository.save(u);

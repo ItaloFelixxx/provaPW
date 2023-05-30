@@ -7,11 +7,9 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -26,25 +24,11 @@ public class Produto {
     private String descricao;
     @NotBlank
     private String marca;
-    @NotBlank(message = "O preço não pode ser igual ou menor a zero")
     @Min(0)
     private Long preco;
-    @NotBlank
     private Date deleted;
-    @NotBlank
     private String imageUri;
-    @NotBlank
     private Boolean inSale;
-
-    public void setDeleted(LocalDate now) {
-        LocalDate localDate = now; //Obtem a data atual
-        // Converte o LocalDate em LocalDateTime
-        LocalDateTime localDateTime = localDate.atStartOfDay();
-        // Converte o LocalDateTime em Instant
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-        // Converte o Instant em Date
-        this.deleted = Date.from(instant);
-    }
 
     public Produto(Produto p){
         this.id = p.getId();

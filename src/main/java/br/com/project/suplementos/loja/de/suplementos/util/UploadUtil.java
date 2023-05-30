@@ -16,7 +16,7 @@ public class UploadUtil {
             try{
 
                 //criando diretorio para armazenar o arquivo
-                String postaUploadImagem = "C:\\Users\\Rafael\\Downloads\\loja de suplementos\\loja-de-suplementos\\src\\main\\resources\\static\\imagens\\img-upload";
+                String postaUploadImagem = "C:\\Users\\Ítalo\\Documents\\provaPW\\src\\main\\resources\\static\\imagesUpload";
                 File dir = new File(postaUploadImagem);
                 if((!dir.exists())){
                     dir.mkdirs();

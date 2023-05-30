@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface SuplementoRepository extends JpaRepository<Produto, String> {
     Optional<Produto> findSuplementoByMarca(String Marca);
 
-    Optional<Produto> findSuplementoById(String Id);
+    Produto findSuplementoById(String Id);
 
     List<Produto> findByDeletedIsNull();
 

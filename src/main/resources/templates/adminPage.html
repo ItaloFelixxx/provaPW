@@ -65,7 +65,7 @@
                 <form th:action="@{'/admin/editar/'+${produto.id}}" method="get">
                   <button type="submit" class="btn btn-outline-dark mt-auto" name="edit">Editar</button>
                 </form>
-                <form href="/admin/editar/{id}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?')">
+                <form th:action="@{'/admin/excluir/'+${produto.id}}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?')">
                   <button type="submit" class="btn btn-outline-dark mt-auto" name="delete">Excluir</button>
                 </form>
               </div>

@@ -1,31 +1,27 @@
 package br.com.project.suplementos.loja.de.suplementos.controller;
 
 import br.com.project.suplementos.loja.de.suplementos.model.Produto;
+import br.com.project.suplementos.loja.de.suplementos.service.FileStorageService;
 import br.com.project.suplementos.loja.de.suplementos.service.SuplementoService;
 import br.com.project.suplementos.loja.de.suplementos.util.UploadUtil;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class SuplementoController {
     SuplementoService service;
+    FileStorageService fileService;
     private List<Produto> produtosCompra = new ArrayList<>();
-    public SuplementoController(SuplementoService service){
+    public SuplementoController(SuplementoService service, FileStorageService fileService){
         this.service = service;
+        this.fileService = fileService;
     }
     @GetMapping({"/", "home"})
     public String paginaInicial(Model model, HttpServletResponse response){
@@ -45,7 +41,7 @@ public class SuplementoController {
     }
 
     @GetMapping("/ofertas")
-    public String paginaOfertas(Model model, HttpServletResponse response){
+    public String paginaOfertas(Model model){
         List<Produto> produtos = service.listarOfertas();
         model.addAttribute("produtos",produtos);
         return "index";
@@ -112,18 +108,10 @@ public class SuplementoController {
 
     @PostMapping("/admin/cadastro")
     public String cadastro(@ModelAttribute Produto p, @RequestParam("file") MultipartFile imagem,@RequestParam(name = "inSale", required = false) Boolean promocao){
-        System.out.println("entrei");
         p.setInSale(promocao);
-        try{
-            if(UploadUtil.fazerUploadImagem(imagem)){
-                p.setImageUri(imagem.getOriginalFilename());
-            }
-            service.create(p);
-            System.out.println("Produto cadastrado com sucesso"+p.getImageUri());
-
-        }catch (Exception e){
-            System.out.println("Erro no controler ao adicionar imagem:"+e.getMessage());
-        }
+        p.setImageUri(imagem.getOriginalFilename());
+        this.fileService.save(imagem);
+        this.service.create(p);
         return "adminPage";
     }
 }

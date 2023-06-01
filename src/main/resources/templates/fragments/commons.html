@@ -27,7 +27,7 @@
           </ul>
         </li>
       </ul>
-      <form class="d-flex" th:action="@{/chamarCarrinho}" method="get">
+      <form class="d-flex" th:action="@{/user/chamarCarrinho}" method="get">
         <button class="btn btn-outline-dark" type="submit">
           <i class="bi-cart-fill me-1"></i>
           Carrinho
@@ -41,24 +41,26 @@
 <section th:fragment="section" class="py-5">
   <div class="container px-4 px-lg-5 mt-5">
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-      <div th:each="produto: ${produtos}" class="col mb-5">
+      <div th:each="p: ${produtos}" th:object="${p}" class="col mb-5">
         <div class="card h-100">
           <!-- Product image-->
-          <div th:if="${produto.inSale == true}" class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Oferta</div>
-          <img class="card-img-top" th:src="'../../../../main/webapp/WEB-INF/images/creatina.jpg'" alt="..." />
+          <div th:if="${p.inSale == true}" class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Oferta</div>
+          <img class="card-img-top" th:src="@{'/images/'+${p.imageUri}}" alt="imagem" />
           <!-- Product details-->
           <div class="card-body p-4">
             <div class="text-center">
               <!-- Product name-->
-              <h5 class="fw-bolder" th:text="${produto.nome}"></h5>
+              <h4 class="fw-bolder" th:text="${p.nome}"></h4>
+
+              <p class="card-text" th:text="${p.descricao}"></p>
               <!-- Product price-->
-              <span th:text="'R$' + ${produto.preco}">R$</span>
+              <h5 th:text="'R$' + ${p.preco}">R$</h5>
             </div>
           </div>
           <!-- Product actions-->
           <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div class="text-center">
-              <form th:action="@{'/adicionarCarrinho/'+${produto.id}}" method="post">
+              <form th:action="@{'/user/adicionarCarrinho/'+${p.id}}" method="post">
                 <button type="submit" class="btn btn-outline-dark mt-auto">Adicionar</button>
               </form>
             </div>

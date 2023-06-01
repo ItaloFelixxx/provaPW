@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface SuplementoRepository extends JpaRepository<Produto, String> {
+public interface SuplementoRepository extends JpaRepository<Produto, Integer> {
     Optional<Produto> findSuplementoByMarca(String Marca);
 
-    Produto findSuplementoById(String Id);
+    Produto findSuplementoById(Integer Id);
 
     List<Produto> findByDeletedIsNull();
 

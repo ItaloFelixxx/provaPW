@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -16,8 +15,8 @@ import java.util.Date;
 @Data
 public class Produto {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @NotBlank
     private String nome;
     @NotBlank

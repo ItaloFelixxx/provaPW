@@ -3,10 +3,7 @@ package br.com.project.suplementos.loja.de.suplementos.service;
 import br.com.project.suplementos.loja.de.suplementos.model.Produto;
 import br.com.project.suplementos.loja.de.suplementos.repository.SuplementoRepository;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SuplementoService{
@@ -28,7 +25,7 @@ public class SuplementoService{
         return repository.findByInSaleIsTrue();
     }
 
-    public Produto buscarPeloId(String id){
+    public Produto buscarPeloId(Integer id){
         return repository.findSuplementoById(id);
     }
 

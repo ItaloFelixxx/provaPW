@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -27,30 +29,23 @@ public class SuplementoController {
         this.service = service;
         this.fileService = fileService;
     }
-    @GetMapping({"/", "home", "/user/"})
+    @GetMapping({"/", "home", "/user"})
     public String paginaInicial(Model model, HttpServletResponse response){
         List<Produto> produtos = service.getItensNaoDeletados();
         model.addAttribute("produtos",produtos);
         int tamanhoItensCarrinho = service.tamanhoCarrinho(produtosCompra);
         model.addAttribute("tamanhoItensCarrinho", tamanhoItensCarrinho);
 
-//        LocalDateTime now = LocalDateTime.now();
-//        LocalDateTime expires = now.plusDays(1);
-//        Duration duration = Duration.between(now, expires);
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        String cookieValue = now.format(formatter);
-//
-//
-//        Cookie visitaCookie = new Cookie("visita", cookieValue);
-//        visitaCookie.setMaxAge((int) duration.getSeconds());
-//        visitaCookie.setPath("/");
-//        response.addCookie(visitaCookie);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss");
+        String dataHora = dateFormat.format(new Date());
+        Cookie c = new Cookie("visita", dataHora);
+        c.setMaxAge(86400);
+        response.addCookie(c);
 
         return "index";
     }
 
-    @GetMapping("/user/ofertas")
+    @GetMapping("/ofertas")
     public String paginaOfertas(Model model){
         List<Produto> produtos = service.listarOfertas();
         model.addAttribute("produtos",produtos);
@@ -71,6 +66,13 @@ public class SuplementoController {
         int tamanhoItensCarrinho = service.tamanhoCarrinho(produtosCompra);
         model.addAttribute("tamanhoItensCarrinho", tamanhoItensCarrinho);
         return "carrinhoDeCompras";
+    }
+
+    @PostMapping ("/user/finalizarCompra")
+    public String finalizarCompra(Model model, RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("tamanhoItensCarrinho", 0);
+        produtosCompra.clear();
+        return "redirect:/";
     }
 
 }

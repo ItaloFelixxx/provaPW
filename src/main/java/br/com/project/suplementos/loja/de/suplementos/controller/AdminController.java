@@ -3,8 +3,10 @@ package br.com.project.suplementos.loja.de.suplementos.controller;
 import br.com.project.suplementos.loja.de.suplementos.model.Produto;
 import br.com.project.suplementos.loja.de.suplementos.service.FileStorageService;
 import br.com.project.suplementos.loja.de.suplementos.service.SuplementoService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,24 +34,26 @@ public class AdminController {
 
     @PostMapping("/admin/excluir/{id}")
     public String softDeleteProduto(@PathVariable Integer id) {
-        Produto p = service.buscarPeloId(id);
-        p.setDeleted(new Date());
-        service.update(p);
+            Produto p = service.buscarPeloId(id);
+            p.setDeleted(new Date());
+            service.update(p);
         return "redirect:/admin";
     }
 
     @PostMapping("/admin/editar")
-    public String editar(@ModelAttribute Produto p, @RequestParam("file") MultipartFile imagem){
-        Date d = new Date();
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy_HH:mm:ss");
-        String dataUpload = formato.format(d);
+    public String editar(@ModelAttribute @Valid Produto p, @RequestParam("file") MultipartFile imagem, BindingResult bindingResult){
+        if(!bindingResult.hasErrors()) {
+            Date d = new Date();
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy_HH:mm:ss");
+            String dataUpload = formato.format(d);
 
-        dataUpload = dataUpload.replaceAll("/", "_");
-        dataUpload = dataUpload.replaceAll(":", "_");
-        p.setImageUri(dataUpload + imagem.getOriginalFilename());
+            dataUpload = dataUpload.replaceAll("/", "_");
+            dataUpload = dataUpload.replaceAll(":", "_");
+            p.setImageUri(dataUpload + imagem.getOriginalFilename());
 
-        this.fileService.save(imagem, dataUpload);
-        service.update(p);
+            this.fileService.save(imagem, dataUpload);
+            service.update(p);
+        }
         return "redirect:/admin";
     }
 
@@ -73,21 +77,22 @@ public class AdminController {
     }
 
     @PostMapping("/admin/cadastro")
-    public String cadastro(@ModelAttribute Produto p, @RequestParam("file") MultipartFile imagem,@RequestParam(name = "inSale", required = false) Boolean promocao){
-        p.setInSale(promocao);
-        p.setImageUri(imagem.getOriginalFilename());
+    public String cadastro(@ModelAttribute @Valid Produto p, @RequestParam("file") MultipartFile imagem,@RequestParam(name = "inSale", required = false) Boolean promocao, BindingResult bindingResult){
+        if(!bindingResult.hasErrors()) {
+            p.setInSale(promocao);
+            p.setImageUri(imagem.getOriginalFilename());
 
-        Date d = new Date();
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy_HH:mm:ss");
-        String dataUpload = formato.format(d);
+            Date d = new Date();
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy_HH:mm:ss");
+            String dataUpload = formato.format(d);
 
-        dataUpload = dataUpload.replaceAll("/", "_");
-        dataUpload = dataUpload.replaceAll(":", "_");
-        p.setImageUri(dataUpload + imagem.getOriginalFilename());
+            dataUpload = dataUpload.replaceAll("/", "_");
+            dataUpload = dataUpload.replaceAll(":", "_");
+            p.setImageUri(dataUpload + imagem.getOriginalFilename());
 
-        this.fileService.save(imagem, dataUpload);
-        this.service.create(p);
-
+            this.fileService.save(imagem, dataUpload);
+            this.service.create(p);
+        }
         return "redirect:/admin";
     }
 }

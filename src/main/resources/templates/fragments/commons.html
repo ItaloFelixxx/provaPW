@@ -34,6 +34,12 @@
           <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${tamanhoItensCarrinho}"></span>
         </button>
       </form>
+      <form class="d-flex" th:action="@{/logout}" method="get">
+        <button class="btn btn-outline-dark" type="submit">
+          Logout
+          <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
+        </button>
+      </form>
     </div>
   </div>
 </nav>

@@ -18,13 +18,16 @@
 <div th:replace="~{/fragments/commons :: navigation}" ></div>
 <!-- Header-->
 <div th:replace="~{/fragments/commons :: header}" ></div>
+
+<form class="d-flex" th:action="@{/user/finalizarCompra}" method="POST">
+  <button class="btn btn-outline-dark" type="submit">FinalizarCompra</button>
+</form>
 <!-- Cards-->
 <div th:each="item : ${itensCarrinho}" class="card" style="width: 18rem;">
-  <img th:src="${item.imageUri}" class="card-img-top" alt="...">
+  <img th:src="@{'/images/'+${item.imageUri}}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title" th:text="${item.nome}"></h5>
     <p class="card-text" th:text="${item.descricao}"></p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
   </div>
 </div>
 <!-- Footer-->
